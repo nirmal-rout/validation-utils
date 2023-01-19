@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +25,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
-@EnableWebMvc
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @Slf4j
 public class ValidationExceptionHandler {
@@ -56,7 +54,7 @@ public class ValidationExceptionHandler {
         logErrorDetails(ex,request);
 
         String message = "Please revalidate the API payload and send again for ";
-        if(Objects.nonNull(ex.getMessage()))
+        if(null != ex.getMessage())
             message = message + ex.getMessage();
         ValidationFailureResponse response = new ValidationFailureResponse();
         response.setMessage(message);
@@ -71,7 +69,7 @@ public class ValidationExceptionHandler {
         logErrorDetails(ex,request);
 
         String message = "Please revalidate the API payload and send again for ";
-        if(Objects.nonNull(ex.getMessage()))
+        if(null != ex.getMessage())
             message = message + ex.getMessage();
         ValidationFailureResponse response = new ValidationFailureResponse();
         response.setMessage(message);
@@ -98,7 +96,7 @@ public class ValidationExceptionHandler {
     public ValidationFailureResponse validationFailureResponse(ValidationFailureExceptions ex,HttpServletRequest request){
         logErrorDetails(ex,request);
         ValidationFailureResponse response = null;
-        if(Objects.nonNull(ex.getBindingResult())){
+        if(null != ex.getBindingResult()){
             response = generateValidationResponse(ex.getBindingResult());
             response.setAPI_NAME("API_NAME");
         }else{
@@ -111,7 +109,7 @@ public class ValidationExceptionHandler {
 
     private ValidationFailureResponse generateValidationResponse(BindingResult br){
         ValidationFailureResponse response = new ValidationFailureResponse();
-        if(Objects.nonNull(br)){
+        if(null != br){
             List<ErrorResponses> errors = null;
             Map<String,String > errormap = new HashMap<>();
             for (Object object : br.getAllErrors()) {
